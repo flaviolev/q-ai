@@ -1,6 +1,6 @@
-# Hackathon React Demo and Template
+# Q&Ai
 
-Author: Zühlke, Franziska Roten ([franziska.roten@zühlke.com](mailto:franziska.roten@zühlke.com))
+Author: Zühlke
 
 ## Introduction
 

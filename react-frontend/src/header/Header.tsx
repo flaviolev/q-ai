@@ -119,7 +119,7 @@ export default function Header() {
                     <Logo src={logo} alt="Logo"/>
                 </Link>
                 <NavLink to="/">
-                    <Title>Zühlke Hackathon 2024</Title>
+                    <Title>Q&Ai</Title>
                 </NavLink>
                 <HamburgerMenuPlaceholder></HamburgerMenuPlaceholder>
             </HeaderSection>
