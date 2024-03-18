@@ -6,8 +6,9 @@ import Header from './header/Header';
 import { ToastContainer } from 'react-toastify';
 import ErrorBoundary from './error/ErrorBoundary';
 import ErrorPage from './error/ErrorPage';
-import MainPage from './components/MainPage.tsx';
+import LandingPage from './components/LandingPage.tsx';
 import OtherPage from './components/OtherPage.tsx';
+import TopicPage from "./components/TopicPage.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -16,8 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Header/>
             <ErrorBoundary>
                 <Routes>
-                    <Route path="/" element={<MainPage/>}/>
+                    <Route path="/" element={<LandingPage/>}/>
                     <Route path="/other" element={<OtherPage/>}/>
+                    <Route path="/topic" element={<TopicPage/>}/>
                     <Route path="*" element={<ErrorPage statusCode={400} errorMessage={'Page not found'}/>}/>
                 </Routes>
             </ErrorBoundary>
