@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon.model.chatgpt;
+package ch.zuehlke.qai.model.chatgpt;
 
 public record Choice(
         int index,

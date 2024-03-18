@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon.controller.response;
+package ch.zuehlke.qai.controller.response;
 
 import java.util.List;
 

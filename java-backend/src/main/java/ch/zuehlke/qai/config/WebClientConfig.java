@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon.config;
+package ch.zuehlke.qai.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

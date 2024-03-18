@@ -1,9 +1,9 @@
-package ch.zuehlke.fullstack.hackathon.service.chatgpt;
+package ch.zuehlke.qai.service.chatgpt;
 
-import ch.zuehlke.fullstack.hackathon.model.chatgpt.ChatGPTRequest;
-import ch.zuehlke.fullstack.hackathon.model.chatgpt.ChatGPTResponse;
-import ch.zuehlke.fullstack.hackathon.model.chatgpt.Message;
-import ch.zuehlke.fullstack.hackathon.model.chatgpt.ResponseFormat;
+import ch.zuehlke.qai.model.chatgpt.ChatGPTRequest;
+import ch.zuehlke.qai.model.chatgpt.ChatGPTResponse;
+import ch.zuehlke.qai.model.chatgpt.Message;
+import ch.zuehlke.qai.model.chatgpt.ResponseFormat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;

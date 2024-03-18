@@ -1,6 +1,6 @@
-package ch.zuehlke.fullstack.hackathon.service.chatgpt;
+package ch.zuehlke.qai.service.chatgpt;
 
-import ch.zuehlke.fullstack.hackathon.model.chatgpt.ChatGPTResponse;
+import ch.zuehlke.qai.model.chatgpt.ChatGPTResponse;
 import reactor.core.publisher.Mono;
 
 public interface CreateQuiz {
