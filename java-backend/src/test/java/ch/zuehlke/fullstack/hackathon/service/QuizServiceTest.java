@@ -1,17 +1,16 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class QuizServiceTest {
     QuizService quizService;
 
     @BeforeEach
     void setUp() {
-        quizService = new QuizService();
+        quizService = new QuizService(null);
     }
 
     @Test
