@@ -1,7 +1,6 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-import ch.zuehlke.fullstack.hackathon.controller.response.SessionIdDTO;
-import ch.zuehlke.fullstack.hackathon.service.QuizService;
+import ch.zuehlke.fullstack.hackathon.controller.response.QuizIdDto;
 import ch.zuehlke.fullstack.hackathon.service.StartQuizSession;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,8 +22,8 @@ public class QuizController {
             description = "This can be used to create a new quiz")
     @ApiResponse(responseCode = "200", description = "Successfully returned new quiz id")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
-    public SessionIdDTO createQuiz(@RequestParam("topic") String topic) {
+    public QuizIdDto createQuiz(@RequestParam("topic") String topic) {
         UUID sessionId = startQuizSession.startQuizSession(topic);
-        return new SessionIdDTO(sessionId);
+        return new QuizIdDto(sessionId);
     }
 }

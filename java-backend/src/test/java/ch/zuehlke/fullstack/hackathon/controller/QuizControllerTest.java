@@ -1,6 +1,6 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-import ch.zuehlke.fullstack.hackathon.controller.response.SessionIdDTO;
+import ch.zuehlke.fullstack.hackathon.controller.response.QuizIdDto;
 import ch.zuehlke.fullstack.hackathon.service.StartQuizSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +32,9 @@ class QuizControllerTest {
         UUID sessionId = UUID.randomUUID();
         when(startQuizSession.startQuizSession("topic")).thenReturn(sessionId);
 
-        SessionIdDTO sessionIdDTO = quizController.createQuiz("topic");
+        QuizIdDto quizIdDto = quizController.createQuiz("topic");
 
-        assertThat(sessionIdDTO.sessionId()).isEqualTo(sessionId);
+        assertThat(quizIdDto.sessionId()).isEqualTo(sessionId);
 
         verify(startQuizSession).startQuizSession("topic");
     }
