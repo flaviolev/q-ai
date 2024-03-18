@@ -1,16 +1,11 @@
-# Java Fullstack Hackathon 2024
+# Q&Ai
 
 ---
 
 The project is split into four folders
 
 - java-backend
-- dotnet-backend
 - react-frontend
-- angular-frontend
-
-You should be able to combine both backends with any of the frontends interchangeably. \
-You will decide with your team which technologies to use.
 
 ## Setup
 
@@ -39,60 +34,13 @@ private repository.
 
 1. Start the java backend either by
     1. By selecting the `Java Backend` run configuration and running it
-       ![runconfig-springboot.png](doc/runconfig-springboot.png)
     2. Or by executing `./gradlew java-backend:bootRun`
 
 You should be able to open the Swagger endpoint documentation at `http://localhost:8080/swagger-ui/index.html`.
-![swagger.png](doc/swagger.png)
-
-### Dotnet backend
-
-#### Prerequisites
-
-##### Tools
-
-| Name                                                         | Purpose                                             | Version | Version command             | License              |
-| ------------------------------------------------------------ | --------------------------------------------------- | ------- | --------------------------- | -------------------- |
-| [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/)         | IDE                                        | 17.9.2    |             | MIT                  |
-| [.NET SDK](https://dotnet.microsoft.com/en-us/download)      | .NET runtime and development tools                  | 8.0     | `dotnet --version`          | MIT,<br />Apache 2.0 |
-
-In Visual Studio Installer, make sure to include the `ASP.NET and web development` workload.
-
-#### Run dotnet backend
-
-You should be able to open the Swagger endpoint documentation at `http://localhost:8080/swagger/index.html`.
-
-1. make sure that you have all the prerequisites installed
-2. Start the dotnet backend either by
-   1. Clicking on the green play button `HackathonWebApi`
-
-      ![runconfig-dotnet.png](/doc/runconfig-dotnet.png)
-   2. Or by using dotnet commands
-   ```powershell
-      > cd hackathon\dotnet-backend\HackathonWebApi
-      > dotnet restore
-      > dotnet clean
-      > dotnet run
-   ```
-
-### Start Angular frontend
-
-1. By selecting the `Angular Frontend` and running it
-   ![runconfig-npm.png](doc/runconfig-angular.png)
-2. Or by executing `cd angular-frontend` followed by `npm start`
-
-You should now be able to open `http://localhost:4200` to access the frontend.
-
-Now you should see the following screen:
-![setup-complete-with-example-component.png](doc/angular-setup-complete.png)
 
 ### Start React frontend
 
 1. By selecting the `React Frontend` and running it
-   ![runconfig-react.png](doc/runconfig-react.png)
 2. Or by executing `cd react-frontend` followed by `npm run dev`
 
 You should now be able to open `http://localhost:5137` to access the frontend.
-
-Now you should see the following screen:
-![setup-complete-with-example-component.png](doc/react-setup-complete.png)
