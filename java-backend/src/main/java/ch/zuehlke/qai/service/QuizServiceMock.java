@@ -1,14 +1,15 @@
-package ch.zuehlke.fullstack.hackathon.service;
+package ch.zuehlke.qai.service;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Profile("!dev")
+@Profile("dev")
 @Service
-public class QuizService implements StartQuizSession {
+public class QuizServiceMock implements StartQuizSession {
+    @Override
     public UUID startQuizSession(String topic) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return UUID.randomUUID();
     }
 }

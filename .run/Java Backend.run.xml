@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Java Backend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="q-ai.java-backend.main" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.fullstack.hackathon.QAiApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.qai.QAiApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

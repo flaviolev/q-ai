@@ -1,7 +1,7 @@
-package ch.zuehlke.fullstack.hackathon.controller;
+package ch.zuehlke.qai.controller;
 
-import ch.zuehlke.fullstack.hackathon.model.ExampleDto;
-import ch.zuehlke.fullstack.hackathon.service.ExampleService;
+import ch.zuehlke.qai.model.ExampleDto;
+import ch.zuehlke.qai.service.ExampleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;

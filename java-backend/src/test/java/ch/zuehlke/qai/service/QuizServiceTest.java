@@ -1,6 +1,5 @@
-package ch.zuehlke.fullstack.hackathon.service;
+package ch.zuehlke.qai.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

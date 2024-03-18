@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon;
+package ch.zuehlke.qai;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class HackathonApplicationTest {
+public class QAiApplicationTest {
 
     @Test
     public void contextLoads() {

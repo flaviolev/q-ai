@@ -1,7 +1,7 @@
-package ch.zuehlke.fullstack.hackathon.controller;
+package ch.zuehlke.qai.controller;
 
-import ch.zuehlke.fullstack.hackathon.controller.response.QuizIdDto;
-import ch.zuehlke.fullstack.hackathon.service.StartQuizSession;
+import ch.zuehlke.qai.controller.response.QuizIdDto;
+import ch.zuehlke.qai.service.StartQuizSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

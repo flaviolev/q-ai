@@ -1,6 +1,6 @@
-package ch.zuehlke.fullstack.hackathon.service;
+package ch.zuehlke.qai.service;
 
-import ch.zuehlke.fullstack.hackathon.model.ExampleDto;
+import ch.zuehlke.qai.model.ExampleDto;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

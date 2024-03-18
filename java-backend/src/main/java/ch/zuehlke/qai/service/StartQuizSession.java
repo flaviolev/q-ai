@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon.service;
+package ch.zuehlke.qai.service;
 
 import java.util.UUID;
 

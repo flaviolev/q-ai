@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon.model;
+package ch.zuehlke.qai.model;
 
 
 public record ExampleDto (String name, int value) {

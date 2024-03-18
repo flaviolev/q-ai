@@ -1,4 +1,4 @@
-package ch.zuehlke.fullstack.hackathon;
+package ch.zuehlke.qai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
