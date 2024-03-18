@@ -1,6 +1,7 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
 import ch.zuehlke.fullstack.hackathon.controller.response.QuizIdDto;
+import ch.zuehlke.fullstack.hackathon.service.GetAvailableTopics;
 import ch.zuehlke.fullstack.hackathon.service.StartQuizSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,17 +15,19 @@ import static org.mockito.Mockito.*;
 class QuizControllerTest {
 
     StartQuizSession startQuizSession;
+    GetAvailableTopics getAvailableTopics;
     QuizController quizController;
 
     @BeforeEach
     void setUp() {
         startQuizSession = mock(StartQuizSession.class);
-        quizController = new QuizController(startQuizSession);
+        getAvailableTopics = mock(GetAvailableTopics.class);
+        quizController = new QuizController(startQuizSession, getAvailableTopics);
     }
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(startQuizSession);
+        verifyNoMoreInteractions(startQuizSession, getAvailableTopics);
     }
 
     @Test
