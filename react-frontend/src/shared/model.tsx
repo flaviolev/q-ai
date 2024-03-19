@@ -1,4 +1,7 @@
-export interface ExampleDto {
-    name: string;
-    value: number;
+export interface QuizIdDto {
+    id: string;
+}
+
+export interface TopicsDto {
+    topicList: string[];
 }
