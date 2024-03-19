@@ -56,7 +56,6 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
         return currentScore;
     }
 
-
     @Override
     public Score getCurrentScoring(UUID quizId) {
         List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId);
