@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SubmitAnswerService implements SubmitAnswer {
+public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
 
     private final QuizRepository quizRepository;
     private final SubmissionRepository submissionRepository;
@@ -51,6 +51,15 @@ public class SubmitAnswerService implements SubmitAnswer {
         submissionRepository.save(submission);
 
         List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quiz.get().getId().toString());
+        Score currentScore = new Score();
+        currentScore.setSubmissions(submissionsForQuiz);
+        return currentScore;
+    }
+
+
+    @Override
+    public Score getCurrentScoring(UUID quizId) {
+        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId.toString());
         Score currentScore = new Score();
         currentScore.setSubmissions(submissionsForQuiz);
         return currentScore;

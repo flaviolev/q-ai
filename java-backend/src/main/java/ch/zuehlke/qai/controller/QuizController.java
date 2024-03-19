@@ -9,10 +9,7 @@ import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.mapper.SubmissionMapper;
 import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.model.Score;
-import ch.zuehlke.qai.service.GetAvailableTopics;
-import ch.zuehlke.qai.service.GetNextQuestion;
-import ch.zuehlke.qai.service.StartQuizSession;
-import ch.zuehlke.qai.service.SubmitAnswer;
+import ch.zuehlke.qai.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,7 @@ public class QuizController {
     private final GetAvailableTopics getAvailableTopics;
     private final SubmitAnswer submitAnswer;
     private final GetNextQuestion getNextQuestion;
+    private final GetCurrentScoring getCurrentScoring;
     private final QuizMapper quizMapper;
     private final SubmissionMapper submissionMapper;
 
@@ -71,8 +69,19 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "Successfully submitted answer")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
     @PostMapping("/submit")
-    public ResponseEntity<ScoreDto> getTopics(@RequestParam("sessionId") UUID sessionId, @RequestBody SubmitAnswerDto submitAnswerDto) {
+    public ResponseEntity<ScoreDto> submitAnswer(@RequestParam("sessionId") UUID sessionId, @RequestBody SubmitAnswerDto submitAnswerDto) {
         Score score = submitAnswer.submitAnswer(sessionId, submitAnswerDto);
+        ScoreDto scoreDto = submissionMapper.mapScoreToDto(score);
+        return ResponseEntity.ok(scoreDto);
+    }
+
+    @Operation(summary = "Submit a quiz answer",
+            description = "This can be used to submit a quiz answer")
+    @ApiResponse(responseCode = "200", description = "Successfully submitted answer")
+    @ApiResponse(responseCode = "500", description = "Something failed internally")
+    @GetMapping("/score")
+    public ResponseEntity<ScoreDto> getCurrentScoring(@RequestParam("quizId") UUID quizId) {
+        Score score = getCurrentScoring.getCurrentScoring(quizId);
         ScoreDto scoreDto = submissionMapper.mapScoreToDto(score);
         return ResponseEntity.ok(scoreDto);
     }

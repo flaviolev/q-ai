@@ -12,10 +12,11 @@ public class SubmissionMapper {
 
     public ScoreDto mapScoreToDto(Score score) {
         List<ScoreDto.SubmissionDto> submissionDtoList = score.getSubmissions().stream().map(this::mapSubmissionToDto).toList();
-        return new ScoreDto(submissionDtoList);
+        int numberOfQuestions = 0;
+        return new ScoreDto(numberOfQuestions, submissionDtoList);
     }
 
     public ScoreDto.SubmissionDto mapSubmissionToDto(Submission submission) {
-        return new ScoreDto.SubmissionDto(submission.getQuizId(), submission.getQuestionId(), submission.getAnswerId(), submission.getCorrectAnswerId());
+        return new ScoreDto.SubmissionDto(submission.getQuiz().getId(), submission.getQuestion().getQuestionId(), submission.getAnswer().getId(), submission.getCorrectAnswer().getId());
     }
 }
