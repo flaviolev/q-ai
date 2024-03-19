@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import Button from '../shared/Button.tsx';
 import remoteService from '../services/RemoteService.tsx';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import Title from "../shared/Title.tsx";
-import {QuizIdDto, TopicsDto} from "../shared/model.tsx";
-import LoadingPage from "../shared/LoadingPage.tsx";
+import {QuizIdDto} from "../shared/model.tsx";
 import {useNavigate} from "react-router-dom";
+import TextInput from "../shared/TextInput.tsx";
+import Button from "../shared/Button.tsx";
+import LoadingPageWithText from "../shared/LoadingPageWithText.tsx";
 
 const Section = styled.div`
   display: flex;
@@ -15,25 +16,14 @@ const Section = styled.div`
 
 export default function TopicPage() {
 
-    useEffect(() => {
-        loadTopics();
-    }, []);
-
     const navigate = useNavigate();
 
-    const [topics, setTopics] = useState<TopicsDto | undefined>(undefined);
+    const [topicText, setTopicText] = useState<string | undefined>(undefined);
     const [quizId, setQuizId] = useState<QuizIdDto | undefined>({id: ""});
 
-    function loadTopics() {
-        remoteService.get<TopicsDto>('/quiz/topics').then((response: TopicsDto) => {
-            console.log(response);
-            setTopics(response)
-        });
-    }
-
-    function createQuiz(topic: String) {
+    function createQuiz() {
         setQuizId(undefined)
-        remoteService.post<QuizIdDto>(`/quiz?topic=${topic}`).then((response: QuizIdDto) => {
+        remoteService.post<QuizIdDto>(`/quiz?topic=${topicText}`).then((response: QuizIdDto) => {
             console.log(response);
             setQuizId(response)
             navigateToQuizPage(response)
@@ -44,16 +34,19 @@ export default function TopicPage() {
         navigate(`/quiz/${quizId.id}`);
     }
 
-    if (topics == undefined || quizId == undefined) {
-        return <LoadingPage/>;
+    function handleTextChange(newTopicText: string) {
+        setTopicText(newTopicText);
+    }
+
+    if (quizId == undefined) {
+        return <LoadingPageWithText text={"Your quiz gets generated..."}/>;
     }
 
     return (
         <Section>
             <Title>Topics</Title>
-            {topics.topicList.map((topic, idx) => (
-                <Button key={idx} onClick={() => createQuiz(topic)}>{topic}</Button>
-            ))}
+            <TextInput placeholder="Enter topic here..." onChange={handleTextChange} value={topicText}/>
+            <Button onClick={createQuiz}>Start Quiz with Topic</Button>
         </Section>
     );
 }
