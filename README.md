@@ -2,7 +2,7 @@
 
 ---
 
-The project is split into four folders
+The project is split into two folders
 
 - java-backend
 - react-frontend
@@ -19,14 +19,8 @@ If your setup already has some of the required tools installed, please adjust ac
    Node: **20.11.1** \
    Package Manager: npm **10.5.0**
 5. Install a new version of IntelliJ or VSCode
-6. Clone the master branch with `git clone https://github.com/Cyberdog52/hackathon.git`
-7. (optional) Open the project with IntelliJ and let gradle build the project. Skip this step if you don't intend to work with java during the hackathon.
-8. (optional) If prompted, install java (17.0.5). Skip this step if you don't intend to work with java during the hackathon.
-9. Install the npm dependencies with `cd angular-frontend` followed by `npm install`
-10. Install the npm dependencies with `cd react-frontend` followed by `npm install`
-
-During the hackathon your team can decide to use a custom branch on this GitHub repository or to fork it to your own
-private repository.
+6. Install the npm dependencies with `cd angular-frontend` followed by `npm install`
+7. Install the npm dependencies with `cd react-frontend` followed by `npm install`
 
 ## Run
 
