@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 @RequiredArgsConstructor
 @Profile("!dev")
 @Service
@@ -24,7 +25,6 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
     private final QuizRepository quizRepository;
     private final ChatGPTService chatGPTService;
     private final QuizMapper quizMapper;
-
 
     @Value("${quiz.number-of-questions-per-round}")
     Integer numberOfQuestionsPerRound = 5;
@@ -53,7 +53,7 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
                 .sendCompletionMessages(List.of(systemMessage, message))
                 .block();
 
-        if(response == null) {
+        if (response == null) {
             throw new RuntimeException("ChatGPT service did not respond");
         }
 

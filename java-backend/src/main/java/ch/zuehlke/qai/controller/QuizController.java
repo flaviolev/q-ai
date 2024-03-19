@@ -3,9 +3,12 @@ package ch.zuehlke.qai.controller;
 import ch.zuehlke.qai.controller.request.SubmitAnswerDto;
 import ch.zuehlke.qai.controller.response.QuestionDTO;
 import ch.zuehlke.qai.controller.response.QuizIdDto;
+import ch.zuehlke.qai.controller.response.ScoreDto;
 import ch.zuehlke.qai.controller.response.TopicsDto;
 import ch.zuehlke.qai.mapper.QuizMapper;
+import ch.zuehlke.qai.mapper.SubmissionMapper;
 import ch.zuehlke.qai.model.Question;
+import ch.zuehlke.qai.model.Score;
 import ch.zuehlke.qai.service.GetAvailableTopics;
 import ch.zuehlke.qai.service.GetNextQuestion;
 import ch.zuehlke.qai.service.StartQuizSession;
@@ -31,6 +34,7 @@ public class QuizController {
     private final SubmitAnswer submitAnswer;
     private final GetNextQuestion getNextQuestion;
     private final QuizMapper quizMapper;
+    private final SubmissionMapper submissionMapper;
 
     @PostMapping
     @Operation(summary = "Create a new quiz",
@@ -67,8 +71,9 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "Successfully submitted answer")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
     @PostMapping("/submit")
-    public ResponseEntity<Void> getTopics(@RequestParam("sessionId") UUID sessionId, @RequestBody SubmitAnswerDto submitAnswerDto) {
-        submitAnswer.submitAnswer(sessionId, submitAnswerDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ScoreDto> getTopics(@RequestParam("sessionId") UUID sessionId, @RequestBody SubmitAnswerDto submitAnswerDto) {
+        Score score = submitAnswer.submitAnswer(sessionId, submitAnswerDto);
+        ScoreDto scoreDto = submissionMapper.mapScoreToDto(score);
+        return ResponseEntity.ok(scoreDto);
     }
 }

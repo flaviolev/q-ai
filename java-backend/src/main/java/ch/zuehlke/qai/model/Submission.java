@@ -14,15 +14,15 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
+    @Column(name = "quiz_id")
+    private UUID quizId;
 
-    @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Question question;
+    @Column(name = "question_id")
+    private UUID questionId;
 
-    @ManyToOne
-    @JoinColumn(name = "answer_id")
-    private Answer answer;
+    @Column(name = "answer_id")
+    private UUID answerId;
+
+    @Column(name = "answer_id")
+    private UUID correctAnswerId;
 }
