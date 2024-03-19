@@ -1,10 +1,4 @@
-import styled from 'styled-components';
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import Section from "../shared/Section.tsx";
 
 export default function OtherPage() {
     return (
