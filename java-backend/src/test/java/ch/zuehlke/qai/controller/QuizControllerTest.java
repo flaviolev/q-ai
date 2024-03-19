@@ -1,7 +1,9 @@
 package ch.zuehlke.qai.controller;
 
 import ch.zuehlke.qai.controller.response.QuizIdDto;
+import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.service.GetAvailableTopics;
+import ch.zuehlke.qai.service.GetNextQuestion;
 import ch.zuehlke.qai.service.StartQuizSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,13 +18,19 @@ class QuizControllerTest {
 
     StartQuizSession startQuizSession;
     GetAvailableTopics getAvailableTopics;
+
+    GetNextQuestion getNextQuestion;
     QuizController quizController;
+
+    QuizMapper quizMapper;
 
     @BeforeEach
     void setUp() {
         startQuizSession = mock(StartQuizSession.class);
         getAvailableTopics = mock(GetAvailableTopics.class);
-        quizController = new QuizController(startQuizSession, getAvailableTopics);
+        getNextQuestion = mock(GetNextQuestion.class);
+        quizMapper = mock(QuizMapper.class);
+        quizController = new QuizController(startQuizSession, getAvailableTopics, getNextQuestion, quizMapper);
     }
 
     @AfterEach

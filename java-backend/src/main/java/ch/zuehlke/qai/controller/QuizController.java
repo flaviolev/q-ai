@@ -1,8 +1,12 @@
 package ch.zuehlke.qai.controller;
 
+import ch.zuehlke.qai.controller.response.QuestionDTO;
 import ch.zuehlke.qai.controller.response.QuizIdDto;
 import ch.zuehlke.qai.controller.response.TopicsDto;
+import ch.zuehlke.qai.mapper.QuizMapper;
+import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.service.GetAvailableTopics;
+import ch.zuehlke.qai.service.GetNextQuestion;
 import ch.zuehlke.qai.service.StartQuizSession;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +26,8 @@ public class QuizController {
 
     private final StartQuizSession startQuizSession;
     private final GetAvailableTopics getAvailableTopics;
+    private final GetNextQuestion getNextQuestion;
+    private final QuizMapper quizMapper;
 
     @PostMapping
     @Operation(summary = "Create a new quiz",
@@ -39,6 +46,16 @@ public class QuizController {
     public ResponseEntity<TopicsDto> getTopics() {
         List<String> topicList = getAvailableTopics.getAvailableTopics();
         TopicsDto response = new TopicsDto(topicList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get next question with possible answers of the provided quiz.")
+    @ApiResponse(responseCode = "200", description = "Successfully returned list")
+    @ApiResponse(responseCode = "500", description = "Something failed internally")
+    @GetMapping("{id}/next-question")
+    public ResponseEntity<QuestionDTO> getNextQuestion(@PathVariable UUID id) {
+        Optional<Question> nextQuestion = getNextQuestion.getNextQuestion(id);
+        QuestionDTO response = nextQuestion.map(quizMapper::mapQuestionToDto).orElseThrow();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
