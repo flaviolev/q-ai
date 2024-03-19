@@ -10,7 +10,7 @@ import Button from "../shared/Button.tsx";
 
 export default function ScorePage() {
 
-    const {id} = useParams();
+    const {quizId} = useParams();
     const navigate = useNavigate();
     const [score, setScore] = useState<ScoreDto | undefined>(undefined);
 
@@ -19,7 +19,7 @@ export default function ScorePage() {
     }, []);
 
     function getScore() {
-        remoteService.get<ScoreDto>(`/quiz/score?quizId=${id}`).then((response: ScoreDto) => {
+        remoteService.get<ScoreDto>(`/quiz/score?quizId=${quizId}`).then((response: ScoreDto) => {
             const correctCount = response.submissionDtoList.reduce((count, answer) => {
                 return count + (answer.answerId === answer.correctAnswerId ? 1 : 0);
             }, 0);
