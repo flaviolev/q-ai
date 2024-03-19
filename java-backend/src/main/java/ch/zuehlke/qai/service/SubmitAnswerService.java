@@ -50,7 +50,7 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
 
         submissionRepository.save(submission);
 
-        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quiz.get().getId().toString());
+        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quiz.get().getId());
         Score currentScore = new Score();
         currentScore.setSubmissions(submissionsForQuiz);
         return currentScore;
@@ -59,7 +59,7 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
 
     @Override
     public Score getCurrentScoring(UUID quizId) {
-        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId.toString());
+        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId);
         Score currentScore = new Score();
         currentScore.setSubmissions(submissionsForQuiz);
         return currentScore;
