@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import {useState} from 'react';
 import styled from 'styled-components';
 import logo from '/src/assets/zuhlke-logo-rgb.png';
-import { Link } from 'react-router-dom';
-import { slide as Menu } from 'react-burger-menu';
+import {Link} from 'react-router-dom';
+import {slide as Menu} from 'react-burger-menu';
 
 const HeaderSection = styled.header`
   display: flex;
@@ -109,10 +109,7 @@ export default function Header() {
                 <NavLink to="/" onClick={closeSideBar}>
                     Home
                 </NavLink>
-                <NavLink to="/other" onClick={closeSideBar}>
-                    Other Page
-                </NavLink>
-                <NavLink to="https://github.com/Cyberdog52/hackathon">Github</NavLink>
+                <NavLink to="https://github.com/flaviolev/q-ai/">Github</NavLink>
             </Menu>
             <HeaderSection>
                 <Link to="/">
