@@ -1,5 +1,6 @@
 package ch.zuehlke.qai.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -12,17 +13,20 @@ import java.util.UUID;
 @Entity
 @Setter
 @Getter
-public class Quiz {
+public class Question {
+    @ManyToOne
+    @JoinColumn(name = "quiz_id")
+    @JsonBackReference
+    private Quiz quiz;
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JsonIgnore
-    private UUID id;
+    private UUID questionId;
 
-    @Column
-    @JsonIgnore
-    private String topic;
+    public String text;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers;
 }
