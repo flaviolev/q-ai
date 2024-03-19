@@ -3,8 +3,9 @@ import Button from '../shared/Button.tsx';
 import remoteService from '../services/RemoteService.tsx';
 import {useEffect, useState} from 'react';
 import Title from "../shared/Title.tsx";
-import {TopicsDto} from "../shared/model.tsx";
+import {QuizIdDto, TopicsDto} from "../shared/model.tsx";
 import LoadingPage from "../shared/LoadingPage.tsx";
+import {useNavigate} from "react-router-dom";
 
 const Section = styled.div`
   display: flex;
@@ -13,14 +14,15 @@ const Section = styled.div`
 `;
 
 export default function TopicPage() {
-    function handleClick() {
-    }
 
     useEffect(() => {
         loadTopics();
     }, []);
 
+    const navigate = useNavigate();
+
     const [topics, setTopics] = useState<TopicsDto | undefined>(undefined);
+    const [quizId, setQuizId] = useState<QuizIdDto | undefined>({id: ""});
 
     function loadTopics() {
         remoteService.get<TopicsDto>('/quiz/topics').then((response: TopicsDto) => {
@@ -29,7 +31,20 @@ export default function TopicPage() {
         });
     }
 
-    if (topics == undefined) {
+    function createQuiz(topic: String) {
+        setQuizId(undefined)
+        remoteService.post<QuizIdDto>(`/quiz?topic=${topic}`).then((response: QuizIdDto) => {
+            console.log(response);
+            setQuizId(response)
+            navigateToQuizPage(response)
+        });
+    }
+
+    function navigateToQuizPage(quizId: QuizIdDto) {
+        navigate("/quiz", {state: {quizId: quizId}})
+    }
+
+    if (topics == undefined || quizId == undefined) {
         return <LoadingPage/>;
     }
 
@@ -37,7 +52,7 @@ export default function TopicPage() {
         <Section>
             <Title>Topics</Title>
             {topics.topicList.map((topic, idx) => (
-                <Button key={idx} onClick={handleClick}>{topic}</Button>
+                <Button key={idx} onClick={() => createQuiz(topic)}>{topic}</Button>
             ))}
         </Section>
     );

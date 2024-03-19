@@ -19,11 +19,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Profile("!dev")
 @Service
-public class QuizService implements StartQuizSession {
+public class QuizService implements StartQuizSession, GetNextQuestion {
 
     private final QuizRepository quizRepository;
     private final ChatGPTService chatGPTService;
     private final QuizMapper quizMapper;
+
 
     @Value("${quiz.number-of-questions-per-round}")
     Integer numberOfQuestionsPerRound = 5;
@@ -65,5 +66,11 @@ public class QuizService implements StartQuizSession {
                 });
 
         return savedQuiz.getId();
+    }
+
+    @Override
+    public Optional<Question> getNextQuestion(UUID quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow();
+        return quiz.getQuestions().stream().findFirst();
     }
 }
