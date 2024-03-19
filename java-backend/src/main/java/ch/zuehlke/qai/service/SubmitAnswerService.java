@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,10 +22,21 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
     private final SubmissionRepository submissionRepository;
 
     @Override
-    public Score submitAnswer(UUID sessionId, SubmitAnswerDto submitAnswerDto) {
-        var quiz = quizRepository.findById(sessionId);
+    public Submission submitAnswer(UUID quizId, SubmitAnswerDto submitAnswerDto) {
+
+        List<Submission> existingSubmissionsForQuiz = submissionRepository.findAllByQuizId(quizId);
+
+        Optional<Submission> conflictSubmission = existingSubmissionsForQuiz.stream()
+                .filter(submission -> submission.getQuestion().getQuestionId().equals(submitAnswerDto.questionId()))
+                .findAny();
+
+        if (conflictSubmission.isPresent()) {
+            throw new IllegalStateException("User already answered this question.");
+        }
+
+        var quiz = quizRepository.findById(quizId);
         if (quiz.isEmpty()) {
-            throw new IllegalArgumentException("No quiz found for id " + sessionId);
+            throw new IllegalArgumentException("No quiz found for id " + quizId);
         }
 
         Question question = quiz.get().getQuestions().stream()
@@ -48,12 +60,7 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
         submission.setAnswer(answer);
         submission.setCorrectAnswer(correctAnswer);
 
-        submissionRepository.save(submission);
-
-        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quiz.get().getId());
-        Score currentScore = new Score();
-        currentScore.setSubmissions(submissionsForQuiz);
-        return currentScore;
+        return submissionRepository.save(submission);
     }
 
     @Override

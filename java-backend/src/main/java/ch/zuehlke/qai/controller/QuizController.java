@@ -9,6 +9,7 @@ import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.mapper.SubmissionMapper;
 import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.model.Score;
+import ch.zuehlke.qai.model.Submission;
 import ch.zuehlke.qai.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -69,10 +70,10 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "Successfully submitted answer")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
     @PostMapping("/submit")
-    public ResponseEntity<ScoreDto> submitAnswer(@RequestParam("quizId") UUID quizId, @RequestBody SubmitAnswerDto submitAnswerDto) {
-        Score score = submitAnswer.submitAnswer(quizId, submitAnswerDto);
-        ScoreDto scoreDto = submissionMapper.mapScoreToDto(score);
-        return ResponseEntity.ok(scoreDto);
+    public ResponseEntity<ScoreDto.SubmissionDto> submitAnswer(@RequestParam("quizId") UUID quizId, @RequestBody SubmitAnswerDto submitAnswerDto) {
+        Submission submission = submitAnswer.submitAnswer(quizId, submitAnswerDto);
+        ScoreDto.SubmissionDto submissionDto = submissionMapper.mapSubmissionToDto(submission);
+        return ResponseEntity.ok(submissionDto);
     }
 
     @Operation(summary = "Submit a quiz answer",
