@@ -86,7 +86,7 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow();
         List<Submission> submissions = submissionRepository.findAllByQuizId(quizId);
         return quiz.getQuestions().stream()
-                .filter(question -> containsQuestion(submissions, question.getQuestionId()))
+                .filter(question -> !containsQuestion(submissions, question.getQuestionId()))
                 .min(Comparator.comparingInt(Question::getPosition));
     }
 
