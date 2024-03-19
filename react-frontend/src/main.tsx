@@ -22,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <Route path="/other" element={<OtherPage/>}/>
                     <Route path="/topic" element={<TopicPage/>}/>
                     <Route path="/quiz" element={<QuizPage/>}/>
+                    <Route path="/quiz/:id" element={<QuizPage/>}/>
                     <Route path="*" element={<ErrorPage statusCode={400} errorMessage={'Page not found'}/>}/>
                 </Routes>
             </ErrorBoundary>

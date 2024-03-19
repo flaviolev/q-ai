@@ -17,3 +17,21 @@ export interface PossibleAnswerDto {
     text: string;
     label: string;
 }
+
+export interface ScoreDto {
+    numberOfQuestions: number;
+    submissionDtoList: SubmissionDto[];
+}
+
+export interface SubmissionDto {
+    quizId: string;
+    questionId: string;
+    answerId: string;
+    correctAnswerId: string;
+}
+
+export interface SubmitAnswerDto {
+    userId: string;
+    questionId: string;
+    answerId: string;
+}

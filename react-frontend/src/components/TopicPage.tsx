@@ -41,7 +41,7 @@ export default function TopicPage() {
     }
 
     function navigateToQuizPage(quizId: QuizIdDto) {
-        navigate("/quiz", {state: {quizId: quizId}})
+        navigate(`/quiz/${quizId.id}`);
     }
 
     if (topics == undefined || quizId == undefined) {
