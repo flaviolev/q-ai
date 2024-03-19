@@ -69,8 +69,8 @@ public class QuizController {
     @ApiResponse(responseCode = "200", description = "Successfully submitted answer")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
     @PostMapping("/submit")
-    public ResponseEntity<ScoreDto> submitAnswer(@RequestParam("sessionId") UUID sessionId, @RequestBody SubmitAnswerDto submitAnswerDto) {
-        Score score = submitAnswer.submitAnswer(sessionId, submitAnswerDto);
+    public ResponseEntity<ScoreDto> submitAnswer(@RequestParam("quizId") UUID quizId, @RequestBody SubmitAnswerDto submitAnswerDto) {
+        Score score = submitAnswer.submitAnswer(quizId, submitAnswerDto);
         ScoreDto scoreDto = submissionMapper.mapScoreToDto(score);
         return ResponseEntity.ok(scoreDto);
     }
