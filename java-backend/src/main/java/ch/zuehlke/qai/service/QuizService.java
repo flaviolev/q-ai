@@ -3,19 +3,23 @@ package ch.zuehlke.qai.service;
 import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.model.Quiz;
+import ch.zuehlke.qai.model.Submission;
 import ch.zuehlke.qai.model.chatgpt.ChatGPTResponse;
 import ch.zuehlke.qai.model.chatgpt.Choice;
 import ch.zuehlke.qai.model.chatgpt.Message;
 import ch.zuehlke.qai.repository.QuizRepository;
+import ch.zuehlke.qai.repository.SubmissionRepository;
 import ch.zuehlke.qai.service.chatgpt.ChatGPTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequiredArgsConstructor
 @Profile("!dev")
@@ -23,6 +27,7 @@ import java.util.UUID;
 public class QuizService implements StartQuizSession, GetNextQuestion {
 
     private final QuizRepository quizRepository;
+    private final SubmissionRepository submissionRepository;
     private final ChatGPTService chatGPTService;
     private final QuizMapper quizMapper;
 
@@ -64,7 +69,11 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
                 .map(Optional::get)
                 .forEach((generatedQuiz) -> {
                     List<Question> questions = generatedQuiz.getQuestions();
-                    questions.forEach(question -> question.setQuiz(savedQuiz));
+                    AtomicInteger questionCount = new AtomicInteger(1);
+                    questions.forEach(question -> {
+                        question.setQuiz(savedQuiz);
+                        question.setPosition(questionCount.getAndIncrement());
+                    });
                     savedQuiz.setQuestions(questions);
                     quizRepository.save(savedQuiz);
                 });
@@ -75,6 +84,14 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
     @Override
     public Optional<Question> getNextQuestion(UUID quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow();
-        return quiz.getQuestions().stream().findFirst();
+        List<Submission> submissions = submissionRepository.findAllByQuizId(quizId);
+        return quiz.getQuestions().stream()
+                .filter(question -> containsQuestion(submissions, question.getQuestionId()))
+                .min(Comparator.comparingInt(Question::getPosition));
+    }
+
+    private boolean containsQuestion(List<Submission> submissions, UUID questionId) {
+        return submissions.stream()
+                .anyMatch(submission -> submission.getQuestion().getQuestionId().equals(questionId));
     }
 }
