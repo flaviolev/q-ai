@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 
-    List<Submission> findAllByQuizId(String quizId);
+    List<Submission> findAllByQuizId(UUID quizId);
 }
