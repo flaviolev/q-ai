@@ -20,6 +20,7 @@ export interface PossibleAnswerDto {
 
 export interface ScoreDto {
     numberOfQuestions: number;
+    correctCount: number;
     submissionDtoList: SubmissionDto[];
 }
 

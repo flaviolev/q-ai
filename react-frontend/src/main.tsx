@@ -10,6 +10,7 @@ import LandingPage from './components/LandingPage.tsx';
 import OtherPage from './components/OtherPage.tsx';
 import TopicPage from "./components/TopicPage.tsx";
 import QuizPage from "./components/QuizPage.tsx";
+import ScorePage from "./components/ScorePage.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <Route path="/topic" element={<TopicPage/>}/>
                     <Route path="/quiz" element={<QuizPage/>}/>
                     <Route path="/quiz/:id" element={<QuizPage/>}/>
+                    <Route path="/score" element={<ScorePage/>}/>
                     <Route path="*" element={<ErrorPage statusCode={400} errorMessage={'Page not found'}/>}/>
                 </Routes>
             </ErrorBoundary>
