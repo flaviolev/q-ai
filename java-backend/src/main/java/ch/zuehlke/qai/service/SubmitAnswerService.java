@@ -3,25 +3,27 @@ package ch.zuehlke.qai.service;
 import ch.zuehlke.qai.controller.request.SubmitAnswerDto;
 import ch.zuehlke.qai.model.Answer;
 import ch.zuehlke.qai.model.Question;
+import ch.zuehlke.qai.model.Score;
 import ch.zuehlke.qai.model.Submission;
 import ch.zuehlke.qai.repository.QuizRepository;
 import ch.zuehlke.qai.repository.SubmissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SubmitAnswerService implements SubmitAnswer {
+public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
 
     private final QuizRepository quizRepository;
     private final SubmissionRepository submissionRepository;
 
     @Override
-    public void submitAnswer(UUID sessionId, SubmitAnswerDto submitAnswerDto) {
+    public Score submitAnswer(UUID sessionId, SubmitAnswerDto submitAnswerDto) {
         var quiz = quizRepository.findById(sessionId);
-        if(quiz.isEmpty()) {
+        if (quiz.isEmpty()) {
             throw new IllegalArgumentException("No quiz found for id " + sessionId);
         }
 
@@ -35,11 +37,31 @@ public class SubmitAnswerService implements SubmitAnswer {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("No answer found for id " + submitAnswerDto.answerId()));
 
+        Answer correctAnswer = question.getAnswers().stream()
+                .filter(Answer::isCorrect)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("No correct answer found for question id " + question.getQuestionId()));
+
         Submission submission = new Submission();
         submission.setQuiz(quiz.get());
         submission.setQuestion(question);
         submission.setAnswer(answer);
+        submission.setCorrectAnswer(correctAnswer);
 
         submissionRepository.save(submission);
+
+        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quiz.get().getId().toString());
+        Score currentScore = new Score();
+        currentScore.setSubmissions(submissionsForQuiz);
+        return currentScore;
+    }
+
+
+    @Override
+    public Score getCurrentScoring(UUID quizId) {
+        List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId.toString());
+        Score currentScore = new Score();
+        currentScore.setSubmissions(submissionsForQuiz);
+        return currentScore;
     }
 }

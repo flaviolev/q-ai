@@ -14,7 +14,7 @@ public class Submission {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
@@ -25,4 +25,8 @@ public class Submission {
     @ManyToOne
     @JoinColumn(name = "answer_id")
     private Answer answer;
+
+    @ManyToOne
+    @JoinColumn(name = "correct_answer_id")
+    private Answer correctAnswer;
 }
