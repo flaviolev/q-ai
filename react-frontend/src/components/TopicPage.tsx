@@ -38,6 +38,12 @@ export default function TopicPage() {
         setTopicText(newTopicText);
     }
 
+    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+            createQuiz();
+        }
+    }
+
     if (quizId == undefined) {
         return <LoadingPageWithText text={"Your quiz gets generated..."}/>;
     }
@@ -45,7 +51,8 @@ export default function TopicPage() {
     return (
         <Section>
             <Title>Topics</Title>
-            <TextInput placeholder="Enter topic here..." onChange={handleTextChange} value={topicText}/>
+            <TextInput placeholder="Enter topic here..." onChange={handleTextChange} onKeyDown={handleKeyDown}
+                       value={topicText}/>
             <Button onClick={createQuiz}>Start Quiz with Topic</Button>
         </Section>
     );
