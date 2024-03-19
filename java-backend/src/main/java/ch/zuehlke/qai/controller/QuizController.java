@@ -61,7 +61,7 @@ public class QuizController {
     @GetMapping("{id}/next-question")
     public ResponseEntity<QuestionDTO> getNextQuestion(@PathVariable UUID id) {
         Optional<Question> nextQuestion = getNextQuestion.getNextQuestion(id);
-        QuestionDTO response = nextQuestion.map(quizMapper::mapQuestionToDto).orElseThrow();
+        QuestionDTO response = nextQuestion.map(quizMapper::mapQuestionToDto).orElse(null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

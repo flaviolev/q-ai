@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import {HashRouter, Route, Routes} from 'react-router-dom';
 import Header from './header/Header';
-import { ToastContainer } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import ErrorBoundary from './error/ErrorBoundary';
 import ErrorPage from './error/ErrorPage';
 import LandingPage from './components/LandingPage.tsx';
@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <Route path="/topic" element={<TopicPage/>}/>
                     <Route path="/quiz" element={<QuizPage/>}/>
                     <Route path="/quiz/:id" element={<QuizPage/>}/>
-                    <Route path="/score" element={<ScorePage/>}/>
+                    <Route path="/score/:quizId" element={<ScorePage/>}/>
                     <Route path="*" element={<ErrorPage statusCode={400} errorMessage={'Page not found'}/>}/>
                 </Routes>
             </ErrorBoundary>

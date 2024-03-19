@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {useEffect, useState} from 'react';
 import Title from "../shared/Title.tsx";
 import LoadingPage from "../shared/LoadingPage.tsx";
-import {useParams} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import {QuestionDto, SubmissionDto} from "../shared/model.tsx";
 import SubTitle from "../shared/SubTitle.tsx";
 import Grid from "../shared/Grid.tsx";
@@ -11,13 +11,15 @@ import remoteService from "../services/RemoteService.tsx";
 import Button from "../shared/Button.tsx";
 
 const Section = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 
 export default function QuizPage() {
+
+    const navigate = useNavigate();
 
     const [question, setQuestion] = useState<QuestionDto | undefined>(undefined);
 
@@ -30,21 +32,25 @@ export default function QuizPage() {
         getQuestion();
     }, []);
 
+    function navigateToScorePage() {
+        navigate(`/score/${id}`);
+    }
+
     function getQuestion() {
         setSelectedId(undefined);
         setAnswerId(undefined);
         remoteService.get<QuestionDto>(`/quiz/${id}/next-question`).then((response: QuestionDto) => {
             console.log(response);
-            setQuestion(response)
+            if (response) {
+                setQuestion(response)
+            } else {
+                navigateToScorePage()
+            }
         });
     }
 
-    if (question == undefined) {
-        return <LoadingPage/>;
-    }
-
     function submittedSelectedAnswer(selected: string) {
-        if(selectedId || answerId){
+        if (selectedId || answerId) {
             return;
         }
         setSelectedId(selected);
@@ -56,6 +62,10 @@ export default function QuizPage() {
             console.log(response);
             setAnswerId(response.correctAnswerId);
         });
+    }
+
+    if (question == undefined) {
+        return <LoadingPage/>;
     }
 
     return (
@@ -70,7 +80,7 @@ export default function QuizPage() {
                                     onSubmit={submittedSelectedAnswer}></PossibleAnswer>
                 ))}
             </Grid>
-            {answerId && <SubTitle>{(selectedId === answerId)  ? "Great" : "Keep trying"}</SubTitle>}
+            {answerId && <SubTitle>{(selectedId === answerId) ? "Great" : "Keep trying"}</SubTitle>}
             {answerId && <Button onClick={getQuestion}>Next</Button>}
         </Section>
     );
