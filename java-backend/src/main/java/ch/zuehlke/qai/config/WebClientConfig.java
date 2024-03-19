@@ -12,10 +12,10 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class WebClientConfig {
 
-    @Value("${open-api.url}")
+    @Value("${chatgpt.url}")
     private String baseUrl;
 
-    @Value("${open-api.api-token}")
+    @Value("${chatgpt.api-key}")
     private String apiToken;
 
     @Bean
