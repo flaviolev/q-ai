@@ -3,6 +3,7 @@ package ch.zuehlke.qai.service;
 import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.model.Quiz;
+import ch.zuehlke.qai.model.chatgpt.ChatGPTResponse;
 import ch.zuehlke.qai.model.chatgpt.Choice;
 import ch.zuehlke.qai.model.chatgpt.Message;
 import ch.zuehlke.qai.repository.QuizRepository;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 @RequiredArgsConstructor
 @Profile("!dev")
 @Service
@@ -49,20 +49,24 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
         Quiz quiz = new Quiz();
         quiz.setTopic(topic);
         Quiz savedQuiz = quizRepository.save(quiz);
-        chatGPTService
+        ChatGPTResponse response = chatGPTService
                 .sendCompletionMessages(List.of(systemMessage, message))
-                .subscribe((response) -> {
-                    response.choices().stream()
-                            .map(Choice::message)
-                            .map(quizMapper::mapToQuiz)
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .forEach((generatedQuiz) -> {
-                                List<Question> questions = generatedQuiz.getQuestions();
-                                questions.forEach(question -> question.setQuiz(savedQuiz));
-                                savedQuiz.setQuestions(questions);
-                                quizRepository.save(savedQuiz);
-                            });
+                .block();
+
+        if(response == null) {
+            throw new RuntimeException("ChatGPT service did not respond");
+        }
+
+        response.choices().stream()
+                .map(Choice::message)
+                .map(quizMapper::mapToQuiz)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .forEach((generatedQuiz) -> {
+                    List<Question> questions = generatedQuiz.getQuestions();
+                    questions.forEach(question -> question.setQuiz(savedQuiz));
+                    savedQuiz.setQuestions(questions);
+                    quizRepository.save(savedQuiz);
                 });
 
         return savedQuiz.getId();
