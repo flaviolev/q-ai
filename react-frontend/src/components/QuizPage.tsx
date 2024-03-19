@@ -3,11 +3,12 @@ import {useEffect, useState} from 'react';
 import Title from "../shared/Title.tsx";
 import LoadingPage from "../shared/LoadingPage.tsx";
 import {useParams} from "react-router-dom"
-import {QuestionDto, ScoreDto} from "../shared/model.tsx";
+import {QuestionDto, SubmissionDto} from "../shared/model.tsx";
 import SubTitle from "../shared/SubTitle.tsx";
 import Grid from "../shared/Grid.tsx";
 import PossibleAnswer from "./quiz/PossibleAnswer.tsx";
 import remoteService from "../services/RemoteService.tsx";
+import Button from "../shared/Button.tsx";
 
 const Section = styled.div`
     display: flex;
@@ -30,6 +31,8 @@ export default function QuizPage() {
     }, []);
 
     function getQuestion() {
+        setSelectedId(undefined);
+        setAnswerId(undefined);
         remoteService.get<QuestionDto>(`/quiz/${id}/next-question`).then((response: QuestionDto) => {
             console.log(response);
             setQuestion(response)
@@ -40,14 +43,19 @@ export default function QuizPage() {
         return <LoadingPage/>;
     }
 
-    function submittedSelectedAnswer(selected: string){
+    function submittedSelectedAnswer(selected: string) {
+        if(selectedId || answerId){
+            return;
+        }
         setSelectedId(selected);
-        remoteService.post<ScoreDto>(`/quiz/submit?quizId=${id}`, {questionId: question?.id, answerId: selected, userId: ''}).then((response: ScoreDto) => {
+        remoteService.post<SubmissionDto>(`/quiz/submit?quizId=${id}`, {
+            questionId: question?.id,
+            answerId: selected,
+            userId: ''
+        }).then((response: SubmissionDto) => {
             console.log(response);
-            const correctAnswerId = response.submissionDtoList.find(s => s.answerId === selectedId)?.correctAnswerId;
-            setAnswerId(correctAnswerId);
+            setAnswerId(response.correctAnswerId);
         });
-
     }
 
     return (
@@ -55,10 +63,15 @@ export default function QuizPage() {
             <Title>Quiz</Title>
             <SubTitle>{question.text}</SubTitle>
             <Grid>
-                {question.possibleAnswers.map((possibleAnswer, idx) => ("test " + answerId &&
-                    <PossibleAnswer key={idx} possibleAnswer={possibleAnswer} isSelectedAnswer={possibleAnswer.id === selectedId} isCorrectAnswer={possibleAnswer.id === answerId} onSubmit={submittedSelectedAnswer}></PossibleAnswer>
+                {question.possibleAnswers.map((possibleAnswer, idx) => (
+                    <PossibleAnswer key={idx} possibleAnswer={possibleAnswer}
+                                    isSelectedAnswer={possibleAnswer.id === selectedId}
+                                    isCorrectAnswer={possibleAnswer.id === answerId}
+                                    onSubmit={submittedSelectedAnswer}></PossibleAnswer>
                 ))}
             </Grid>
+            {answerId && <SubTitle>{(selectedId === answerId)  ? "Great" : "Keep trying"}</SubTitle>}
+            {answerId && <Button onClick={getQuestion}>Next</Button>}
         </Section>
     );
 }

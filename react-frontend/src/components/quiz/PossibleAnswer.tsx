@@ -15,8 +15,9 @@ export default function PossibleAnswer({possibleAnswer, onSubmit, isSelectedAnsw
     }
 
     return (
-        <AnswerButton isSelectedAnswer={isSelectedAnswer} isCorrectAnswer={isCorrectAnswer} key={possibleAnswer.id} onClick={() => {
-            handleAnswerSelection(possibleAnswer.id)
-        }}>{possibleAnswer.text}</AnswerButton>
+        <AnswerButton isSelectedAnswer={isSelectedAnswer} isCorrectAnswer={isCorrectAnswer} key={possibleAnswer.id}
+                      onClick={() => {
+                          handleAnswerSelection(possibleAnswer.id)
+                      }}>{possibleAnswer.text}</AnswerButton>
     );
 }
