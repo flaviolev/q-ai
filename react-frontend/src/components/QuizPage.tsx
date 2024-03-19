@@ -55,7 +55,7 @@ export default function QuizPage() {
             <Title>Quiz</Title>
             <SubTitle>{question.text}</SubTitle>
             <Grid>
-                {question.possibleAnswers.map((possibleAnswer, idx) => (
+                {question.possibleAnswers.map((possibleAnswer, idx) => ("test " + answerId &&
                     <PossibleAnswer key={idx} possibleAnswer={possibleAnswer} isSelectedAnswer={possibleAnswer.id === selectedId} isCorrectAnswer={possibleAnswer.id === answerId} onSubmit={submittedSelectedAnswer}></PossibleAnswer>
                 ))}
             </Grid>
