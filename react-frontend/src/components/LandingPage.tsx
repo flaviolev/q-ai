@@ -1,14 +1,8 @@
-import styled from 'styled-components';
 import Button from '../shared/Button.tsx';
 import Title from "../shared/Title.tsx";
 import { useNavigate } from "react-router-dom";
-
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import React from "react";
+import Section from "../shared/Section.tsx";
 
 export default function LandingPage() {
 
