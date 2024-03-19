@@ -24,10 +24,11 @@ const StyledInput = styled.input`
 interface Props {
     placeholder?: string;
     onChange: (value: string) => void;
+    onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     value?: string;
 }
 
-export default function TextInput({placeholder, onChange, value}: Props) {
+export default function TextInput({placeholder, onChange, onKeyDown, value}: Props) {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value);
     };
@@ -37,6 +38,7 @@ export default function TextInput({placeholder, onChange, value}: Props) {
             type="text"
             placeholder={placeholder}
             onChange={handleInputChange}
+            onKeyDown={onKeyDown}
             value={value}
         />
     );
