@@ -43,10 +43,10 @@ public class SubmitAnswerService implements SubmitAnswer {
                 .orElseThrow(() -> new IllegalArgumentException("No correct answer found for question id " + question.getQuestionId()));
 
         Submission submission = new Submission();
-        submission.setQuizId(quiz.get().getId());
-        submission.setQuestionId(question.getQuestionId());
-        submission.setAnswerId(answer.getId());
-        submission.setCorrectAnswerId(correctAnswer.getId());
+        submission.setQuiz(quiz.get());
+        submission.setQuestion(question);
+        submission.setAnswer(answer);
+        submission.setCorrectAnswer(correctAnswer);
 
         submissionRepository.save(submission);
 
