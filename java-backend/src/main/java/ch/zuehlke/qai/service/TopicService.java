@@ -10,6 +10,6 @@ import java.util.List;
 public class TopicService implements GetAvailableTopics {
     @Override
     public List<String> getAvailableTopics() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return List.of("Beer", "Sport");
     }
 }
