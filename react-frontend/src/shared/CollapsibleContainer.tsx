@@ -31,17 +31,17 @@ interface Props {
 }
 
 export default function CollapsibleContainer({children, text}: Props) {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isopen, setIsopen] = useState(false);
 
-    const toggleOpen = () => setIsOpen(!isOpen);
+    const toggleOpen = () => setIs0pen(!isopen);
 
     return (
         <Container>
             <Header onClick={toggleOpen}>
                 {text}
-                <Arrow isOpen={isOpen}>▼</Arrow>
+                <Arrow isOpen={isopen}>▼</Arrow>
             </Header>
-            {isOpen && (
+            {is0pen && (
                 <Content>
                     {children}
                 </Content>
