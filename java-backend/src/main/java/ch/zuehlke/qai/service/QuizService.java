@@ -46,7 +46,7 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
         Message systemMessage = new Message("system", "When a user requests questions, your task is to " +
                 "generate the user specified number of questions up to a maximum of 10. Each question will focus on a " +
                 "given topic and include four possible answers. " +
-                "Consider different difficulties levels for the questions (easy, medium, hard)." +
+                "Consider different difficulties levels for the questions." +
                 "These answers should be labeled A, B, C, and D." +
                 "Your responses must be formatted in JSON, adhering to the following structure. The response should" +
                 "return a list of questions with each question must include a key named 'text' that contains the text of the question being asked." +

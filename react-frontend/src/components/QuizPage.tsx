@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import {useEffect, useState} from 'react';
 import Title from "../shared/Title.tsx";
-import LoadingPage from "../shared/LoadingPage.tsx";
 import {useNavigate, useParams} from "react-router-dom"
 import {QuestionDto, SubmissionDto} from "../shared/model.tsx";
 import SubTitle from "../shared/SubTitle.tsx";
@@ -9,6 +8,7 @@ import Grid from "../shared/Grid.tsx";
 import PossibleAnswer from "./quiz/PossibleAnswer.tsx";
 import remoteService from "../services/RemoteService.tsx";
 import Button from "../shared/Button.tsx";
+import LoadingPageWithText from "../shared/LoadingPageWithText.tsx";
 
 const Section = styled.div`
   display: flex;
@@ -22,6 +22,8 @@ export default function QuizPage() {
     const navigate = useNavigate();
 
     const [question, setQuestion] = useState<QuestionDto | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<Boolean | undefined>(false);
+    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(undefined);
 
     const {id} = useParams();
 
@@ -42,9 +44,9 @@ export default function QuizPage() {
         remoteService.get<QuestionDto>(`/quiz/${id}/next-question`).then((response: QuestionDto) => {
             console.log(response);
             if (response) {
-                setQuestion(response)
+                setQuestion(response);
             } else {
-                navigateToScorePage()
+                navigateToScorePage();
             }
         });
     }
@@ -64,8 +66,8 @@ export default function QuizPage() {
         });
     }
 
-    if (question == undefined) {
-        return <LoadingPage/>;
+    if (isLoading || (question == undefined)) {
+        return <LoadingPageWithText text={"Your next Question is loading..."} isLoading={true}/>;
     }
 
     return (
