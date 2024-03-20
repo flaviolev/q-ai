@@ -44,10 +44,9 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("No question found for id " + submitAnswerDto.questionId()));
 
-        Answer answer = question.getAnswers().stream()
+        Optional<Answer> answer = question.getAnswers().stream()
                 .filter(a -> a.getId().equals(submitAnswerDto.answerId()))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("No answer found for id " + submitAnswerDto.answerId()));
+                .findAny();
 
         Answer correctAnswer = question.getAnswers().stream()
                 .filter(Answer::isCorrect)
@@ -57,7 +56,7 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
         Submission submission = new Submission();
         submission.setQuiz(quiz.get());
         submission.setQuestion(question);
-        submission.setAnswer(answer);
+        submission.setAnswer(answer.orElse(null));
         submission.setCorrectAnswer(correctAnswer);
 
         return submissionRepository.save(submission);

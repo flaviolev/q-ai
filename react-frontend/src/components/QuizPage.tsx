@@ -8,6 +8,7 @@ import Grid from "../shared/Grid.tsx";
 import PossibleAnswer from "./quiz/PossibleAnswer.tsx";
 import remoteService from "../services/RemoteService.tsx";
 import Button from "../shared/Button.tsx";
+import Countdown from "react-countdown";
 import LoadingPageWithText from "../shared/LoadingPageWithText.tsx";
 
 const Section = styled.div`
@@ -15,15 +16,11 @@ const Section = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
-
 export default function QuizPage() {
 
     const navigate = useNavigate();
 
     const [question, setQuestion] = useState<QuestionDto | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState<Boolean | undefined>(false);
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(undefined);
 
     const {id} = useParams();
 
@@ -42,7 +39,6 @@ export default function QuizPage() {
         setSelectedId(undefined);
         setAnswerId(undefined);
         remoteService.get<QuestionDto>(`/quiz/${id}/next-question`).then((response: QuestionDto) => {
-            console.log(response);
             if (response) {
                 setQuestion(response);
             } else {
@@ -52,22 +48,29 @@ export default function QuizPage() {
     }
 
     function submittedSelectedAnswer(selected: string) {
+        submission(selected);
+    }
+
+    const onTimerComplete = () => {
+        submission(undefined);
+    }
+
+    function submission(submissionId: string|undefined){
         if (selectedId || answerId) {
-            return;
+            return
         }
-        setSelectedId(selected);
+        setSelectedId(submissionId);
         remoteService.post<SubmissionDto>(`/quiz/submit?quizId=${id}`, {
             questionId: question?.id,
-            answerId: selected,
+            answerId: submissionId,
             userId: ''
         }).then((response: SubmissionDto) => {
-            console.log(response);
             setAnswerId(response.correctAnswerId);
         });
     }
 
-    if (isLoading || (question == undefined)) {
-        return <LoadingPageWithText text={"Your next Question is loading..."} isLoading={true}/>;
+    if (question == undefined) {
+        return <LoadingPageWithText text={"Your next Question is loading..."}/>;
     }
 
     return (
@@ -82,7 +85,10 @@ export default function QuizPage() {
                                     onSubmit={submittedSelectedAnswer}></PossibleAnswer>
                 ))}
             </Grid>
-            {answerId && <SubTitle>{(selectedId === answerId) ? "Great" : "Keep trying"}</SubTitle>}
+            <Countdown key={answerId} date={Date.now() + 10000} onComplete={onTimerComplete}
+                       renderer={props => !answerId && <SubTitle>{props.seconds}</SubTitle>}
+            />
+            {answerId && <SubTitle>{(selectedId === answerId) ? "Great" : selectedId ? "Keep trying": "Time is up, keep trying"}</SubTitle>}
             {answerId && <Button onClick={getQuestion}>Next</Button>}
         </Section>
     );
