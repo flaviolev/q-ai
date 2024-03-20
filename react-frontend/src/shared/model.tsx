@@ -10,6 +10,7 @@ export interface QuestionDto {
     id: string;
     text: string;
     possibleAnswers: PossibleAnswerDto[];
+    imageUrl: string;
 }
 
 export interface PossibleAnswerDto {

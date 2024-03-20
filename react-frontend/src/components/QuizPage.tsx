@@ -76,6 +76,7 @@ export default function QuizPage() {
     return (
         <Section>
             <Title>Quiz</Title>
+            <img src={question.imageUrl} alt={question.text} />
             <SubTitle>{question.text}</SubTitle>
             <Grid>
                 {question.possibleAnswers.map((possibleAnswer, idx) => (
