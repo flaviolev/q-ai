@@ -37,6 +37,7 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
 
     public UUID startQuizSession(String topic, Optional<Integer> numberOfQuestions, Optional<String> difficultyLevel) {
         int n = numberOfQuestions.orElse(numberOfQuestionsForQuizDefault);
+        n = boundaryCheck(n);
         String difficulty = difficultyLevel.orElse(difficultyLevelDefault);
         Message message = new Message("user",
                 String.format("I would like to have %d %s questions about %s.", n, difficulty, topic)
@@ -83,6 +84,15 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
                 });
 
         return savedQuiz.getId();
+    }
+
+    private static int boundaryCheck(int n) {
+        if (n < 1) {
+            n = 1;
+        } else if (n > 10) {
+            n = 10;
+        }
+        return n;
     }
 
     @Override
