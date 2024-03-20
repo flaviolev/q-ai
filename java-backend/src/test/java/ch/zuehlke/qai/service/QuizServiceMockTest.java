@@ -3,6 +3,8 @@ package ch.zuehlke.qai.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class QuizServiceMockTest {
@@ -16,6 +18,6 @@ class QuizServiceMockTest {
 
     @Test
     void startQuizSession_returnsRandomUUID_successfully() {
-        assertNotNull(quizServiceMock.startQuizSession("topic"));
+        assertNotNull(quizServiceMock.startQuizSession("topic", Optional.empty(), Optional.empty()));
     }
 }
