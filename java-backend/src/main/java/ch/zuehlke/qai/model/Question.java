@@ -26,6 +26,9 @@ public class Question {
 
     public String text;
 
+    @Lob
+    public String imageUrl;
+
     public int position;
 
     @JsonManagedReference

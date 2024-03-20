@@ -35,7 +35,7 @@ public class QuizMapper {
 
     public QuestionDTO mapQuestionToDto(Question question) {
         List<QuestionDTO.PossibleAnswerDTO> answers = question.getAnswers().stream().map(this::mapAnswerToDto).toList();
-        return new QuestionDTO(question.getQuestionId(), answers, question.getText());
+        return new QuestionDTO(question.getQuestionId(), answers, question.getText(), question.getImageUrl());
     }
     public QuestionDTO.PossibleAnswerDTO mapAnswerToDto(Answer answer) {
         return new QuestionDTO.PossibleAnswerDTO(answer.getId(), answer.getLabel(), answer.getText());

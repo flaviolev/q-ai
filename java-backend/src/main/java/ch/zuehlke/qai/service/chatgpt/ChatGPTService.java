@@ -10,12 +10,15 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-public class ChatGPTService implements CreateCompletionMessage {
+public class ChatGPTService implements CreateCompletionMessage, CreateImage {
 
         private final WebClient webClient;
 
         @Value("${chatgpt.model}")
         private String model;
+
+        @Value("${chatgpt.image-model}")
+        private String imageModel;
 
         @Value("${chatgpt.response-format}")
         private String responseFormat;
@@ -30,8 +33,8 @@ public class ChatGPTService implements CreateCompletionMessage {
                 this.webClient = webClientBuilder.build();
         }
 
+        @Override
         public Mono<ChatGPTResponse> sendCompletionMessages(List<Message> messages) {
-
                 ChatGPTRequest chatGPTRequest = new ChatGPTRequest(
                         model,
                         new ResponseFormat(responseFormat),
@@ -44,5 +47,22 @@ public class ChatGPTService implements CreateCompletionMessage {
                         .body(BodyInserters.fromValue(chatGPTRequest))
                         .retrieve()
                         .bodyToMono(ChatGPTResponse.class);
+        }
+
+        @Override
+        public Mono<ChatGPTImageResponse> sendImageGenerationMessage(ImageMessage message) {
+                ChatGPTImageRequest chatGPTImageRequest = new ChatGPTImageRequest(
+                        imageModel,
+                        message.prompt(),
+                        message.numberOfImages(),
+                        ImageQuality.Standard,
+                        ImageFormat.URL,
+                        ImageSize.Medium);
+
+                return this.webClient.post()
+                        .uri("/images/generations")
+                        .body(BodyInserters.fromValue(chatGPTImageRequest))
+                        .retrieve()
+                        .bodyToMono(ChatGPTImageResponse.class);
         }
 }

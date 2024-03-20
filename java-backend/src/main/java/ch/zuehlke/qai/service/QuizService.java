@@ -4,9 +4,7 @@ import ch.zuehlke.qai.mapper.QuizMapper;
 import ch.zuehlke.qai.model.Question;
 import ch.zuehlke.qai.model.Quiz;
 import ch.zuehlke.qai.model.Submission;
-import ch.zuehlke.qai.model.chatgpt.ChatGPTResponse;
-import ch.zuehlke.qai.model.chatgpt.Choice;
-import ch.zuehlke.qai.model.chatgpt.Message;
+import ch.zuehlke.qai.model.chatgpt.*;
 import ch.zuehlke.qai.repository.QuizRepository;
 import ch.zuehlke.qai.repository.SubmissionRepository;
 import ch.zuehlke.qai.service.chatgpt.ChatGPTService;
@@ -14,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +42,10 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
         Message message = new Message("user",
                 String.format("I would like to have %d %s questions about %s.", n, difficulty, topic)
         );
+        ImageMessage imageMessage = new ImageMessage(
+                String.format("I would like to have an %d image about %s.", n, topic),
+                n
+        );
 
         Message systemMessage = new Message("system", "When a user requests questions, your task is to " +
                 "generate the user specified number of questions up to a maximum of 10. Each question will focus on a " +
@@ -59,29 +63,37 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
         Quiz quiz = new Quiz();
         quiz.setTopic(topic);
         Quiz savedQuiz = quizRepository.save(quiz);
-        ChatGPTResponse response = chatGPTService
-                .sendCompletionMessages(List.of(systemMessage, message))
-                .block();
 
-        if (response == null) {
-            throw new RuntimeException("ChatGPT service did not respond");
-        }
+        Mono<ChatGPTResponse> response = chatGPTService
+                .sendCompletionMessages(List.of(systemMessage, message));
 
-        response.choices().stream()
-                .map(Choice::message)
-                .map(quizMapper::mapToQuiz)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach((generatedQuiz) -> {
-                    List<Question> questions = generatedQuiz.getQuestions();
-                    AtomicInteger questionCount = new AtomicInteger(1);
-                    questions.forEach(question -> {
-                        question.setQuiz(savedQuiz);
-                        question.setPosition(questionCount.getAndIncrement());
-                    });
-                    savedQuiz.setQuestions(questions);
-                    quizRepository.save(savedQuiz);
-                });
+        Mono<ChatGPTImageResponse> imageResponse = chatGPTService
+                .sendImageGenerationMessage(imageMessage);
+
+        Flux.zip(response, imageResponse).doOnNext(
+                tuple -> {
+                    ChatGPTResponse chatGPTResponse = tuple.getT1();
+                    ChatGPTImageResponse chatGPTImageResponse = tuple.getT2();
+                    chatGPTResponse.choices().stream()
+                            .map(Choice::message)
+                            .map(quizMapper::mapToQuiz)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .forEach((generatedQuiz) -> {
+                                List<Question> questions = generatedQuiz.getQuestions();
+                                AtomicInteger questionCount = new AtomicInteger(1);
+                                questions.forEach(question -> {
+                                    int position = questionCount.getAndIncrement();
+                                    String image = chatGPTImageResponse.getImageValueAtIndex(position - 1).orElse(null);
+                                    question.setQuiz(savedQuiz);
+                                    question.setPosition(position);
+                                    question.setImageUrl(image);
+                                });
+                                savedQuiz.setQuestions(questions);
+                                quizRepository.save(savedQuiz);
+                            });
+                }
+        ).then().block();
 
         return savedQuiz.getId();
     }
