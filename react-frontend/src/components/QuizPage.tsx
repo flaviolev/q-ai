@@ -86,9 +86,9 @@ export default function QuizPage() {
                                     onSubmit={submittedSelectedAnswer}></PossibleAnswer>
                 ))}
             </Grid>
-            <Countdown key={answerId} date={Date.now() + 10000} onComplete={onTimerComplete}
-                       renderer={props => !answerId && <SubTitle>{props.seconds}</SubTitle>}
-            />
+            {question && <Countdown key={answerId} date={Date.now() + 10000} onComplete={onTimerComplete}
+                        renderer={props => !answerId && <SubTitle>{props.seconds}</SubTitle>}
+            />}
             {answerId && <SubTitle>{(selectedId === answerId) ? "Great" : selectedId ? "Keep trying": "Time is up, keep trying"}</SubTitle>}
             {answerId && <Button onClick={getQuestion}>Next</Button>}
         </Section>
