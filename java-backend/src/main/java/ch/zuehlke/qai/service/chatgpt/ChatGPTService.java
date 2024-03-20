@@ -57,7 +57,7 @@ public class ChatGPTService implements CreateCompletionMessage, CreateImage {
                         message.numberOfImages(),
                         ImageQuality.Standard,
                         ImageFormat.URL,
-                        ImageSize.Medium);
+                        ImageSize.Small);
 
                 return this.webClient.post()
                         .uri("/images/generations")
