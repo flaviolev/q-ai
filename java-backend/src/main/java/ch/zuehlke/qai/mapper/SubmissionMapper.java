@@ -19,7 +19,7 @@ public class SubmissionMapper {
                 .map(Quiz::getQuestions)
                 .map(List::size)
                 .orElseThrow(() -> new RuntimeException("Not able to determine number of questions for quiz."));
-        return new ScoreDto(numberOfQuestions, submissionDtoList);
+        return new ScoreDto(numberOfQuestions, submissionDtoList, score.getMessage());
     }
 
     public ScoreDto.SubmissionDto mapSubmissionToDto(Submission submission) {
