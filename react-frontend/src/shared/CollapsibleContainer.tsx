@@ -19,10 +19,15 @@ const Content = styled.div`
   border-top: 1px solid #ccc;
 `;
 
-const Arrow = styled.span<{ isOpen: boolean }>`
+export interface StyleProps {
+    $isOpen: boolean;
+}
+
+const Arrow = styled.span.attrs<StyleProps>($props => ({
+    'transform': $props.$isopen ? 'rotate(180deg)' : 'rotate(0deg)'
+}))<StyleProps>`
   display: inline-block;
   transition: transform 0.2s ease-in-out;
-  transform: ${({isOpen}) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
 interface Props {
@@ -31,17 +36,17 @@ interface Props {
 }
 
 export default function CollapsibleContainer({children, text}: Props) {
-    const [isopen, setIsopen] = useState(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const toggleOpen = () => setIs0pen(!isopen);
+    const toggleOpen = () => setIsOpen(!isOpen);
 
     return (
         <Container>
             <Header onClick={toggleOpen}>
                 {text}
-                <Arrow isOpen={isopen}>▼</Arrow>
+                <Arrow $isOpen={isOpen.toString()}>▼</Arrow>
             </Header>
-            {is0pen && (
+            {isOpen && (
                 <Content>
                     {children}
                 </Content>
