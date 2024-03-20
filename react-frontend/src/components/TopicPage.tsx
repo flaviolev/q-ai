@@ -21,7 +21,7 @@ export default function TopicPage() {
     const navigate = useNavigate();
 
     const [topicText, setTopicText] = useState<string | undefined>(undefined);
-    const [optionsText, setOptionsText] = useState<string | undefined>("numberOfQuestions=5\ndifficulty=difficult");
+    const [optionsText, setOptionsText] = useState<string | undefined>("numberOfQuestions=3\ndifficulty=difficult");
     const [quizId, setQuizId] = useState<QuizIdDto | undefined>({id: ""});
 
     function createQuiz() {
