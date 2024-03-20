@@ -1,6 +1,7 @@
 package ch.zuehlke.qai.mapper;
 
 import ch.zuehlke.qai.controller.response.ScoreDto;
+import ch.zuehlke.qai.model.IronicMessage;
 import ch.zuehlke.qai.model.Quiz;
 import ch.zuehlke.qai.model.Score;
 import ch.zuehlke.qai.model.Submission;
@@ -18,6 +19,7 @@ import java.util.List;
 public class SubmissionMapper {
 
     private final ChatGPTService chatGPTService;
+    private final IronicMessageMapper ironicMessageMapper;
 
     public ScoreDto mapScoreToDto(Score score) {
         List<ScoreDto.SubmissionDto> submissionDtoList = score.getSubmissions().stream().map(this::mapSubmissionToDto).toList();
@@ -55,8 +57,9 @@ public class SubmissionMapper {
                 .stream()
                 .findFirst()
                 .map(Choice::message)
-                .map(Message::content)
-                .orElse("Wow, you are so smart!");
+                .flatMap(ironicMessageMapper::mapToIronicMessage)
+                .map(IronicMessage::message)
+                .orElse("WoW, yOu ArE sO sMaRt!");
 
         return new ScoreDto(numberOfQuestions, submissionDtoList, ironicScoreMessage);
     }
