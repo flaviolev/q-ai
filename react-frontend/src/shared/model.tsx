@@ -22,6 +22,7 @@ export interface ScoreDto {
     numberOfQuestions: number;
     correctCount: number;
     submissionDtoList: SubmissionDto[];
+    message: string;
 }
 
 export interface SubmissionDto {

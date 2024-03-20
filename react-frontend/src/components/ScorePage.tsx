@@ -3,9 +3,10 @@ import Section from "../shared/Section.tsx";
 import {useEffect, useState} from "react";
 import remoteService from "../services/RemoteService.tsx";
 import {ScoreDto} from "../shared/model.tsx";
-import LoadingPage from "../shared/LoadingPage.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import Button from "../shared/Button.tsx";
+import LoadingPageWithText from "../shared/LoadingPageWithText.tsx";
+import SubTitle from "../shared/SubTitle.tsx";
 
 
 export default function ScorePage() {
@@ -32,12 +33,13 @@ export default function ScorePage() {
     }
 
     if (score == undefined) {
-        return <LoadingPage/>;
+        return <LoadingPageWithText text={"Your score gets evaluated..."}/>;
     }
 
     return (
         <Section>
             <Title>Score</Title>
+            <SubTitle>{score.message}</SubTitle>
             <h2>{score.correctCount}/{score.numberOfQuestions} correct</h2>
             <Button onClick={handleRestartQuiz}>New Quiz</Button>
         </Section>

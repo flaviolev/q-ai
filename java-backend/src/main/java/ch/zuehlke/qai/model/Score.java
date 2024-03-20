@@ -9,4 +9,5 @@ import java.util.List;
 @Setter
 public class Score {
     List<Submission> submissions;
+    String message;
 }

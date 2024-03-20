@@ -68,6 +68,7 @@ public class SubmitAnswerService implements SubmitAnswer, GetCurrentScoring {
         List<Submission> submissionsForQuiz = submissionRepository.findAllByQuizId(quizId);
         Score currentScore = new Score();
         currentScore.setSubmissions(submissionsForQuiz);
+        currentScore.setMessage("Congratulations, well done!");
         return currentScore;
     }
 }
