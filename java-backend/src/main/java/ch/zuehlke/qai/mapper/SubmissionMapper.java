@@ -23,6 +23,6 @@ public class SubmissionMapper {
     }
 
     public ScoreDto.SubmissionDto mapSubmissionToDto(Submission submission) {
-        return new ScoreDto.SubmissionDto(submission.getQuiz().getId(), submission.getQuestion().getQuestionId(), submission.getAnswer().getId(), submission.getCorrectAnswer().getId());
+        return new ScoreDto.SubmissionDto(submission.getQuiz().getId(), submission.getQuestion().getQuestionId(), submission.getAnswer() != null ? submission.getAnswer() .getId() : null, submission.getCorrectAnswer().getId());
     }
 }

@@ -10,7 +10,6 @@ interface Props {
 
 export default function PossibleAnswer({possibleAnswer, onSubmit, isSelectedAnswer, isCorrectAnswer}: Props) {
     function handleAnswerSelection(answerId: string) {
-        console.log(`selected Answer: ${answerId}`)
         onSubmit(answerId);
     }
 

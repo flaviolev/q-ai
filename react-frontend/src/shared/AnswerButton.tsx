@@ -8,11 +8,11 @@ export enum ButtonStyle {
 }
 
 export interface StyleProps {
-    buttonbackgroundcolor: ButtonStyle;
+    $buttonBackgroundColor: ButtonStyle;
 }
 
 const StyledButton = styled.button<StyleProps>`
-  background-color: ${props => props.buttonbackgroundcolor.valueOf()};
+  background-color: ${props => props.$buttonBackgroundColor.valueOf()};
   font-weight: bold;
   color: white;
   padding: 1rem 2rem;
@@ -25,8 +25,8 @@ const StyledButton = styled.button<StyleProps>`
   border: 1px solid var(--secondary);
 
   &:hover {
-    color: ${props => props.buttonbackgroundcolor !== ButtonStyle.INITIAL && "white" || "var(--secondary)"};
-    background-color: ${props => props.buttonbackgroundcolor !== ButtonStyle.INITIAL && props.buttonbackgroundcolor.valueOf() || "white"};
+    color: ${props => props.$buttonBackgroundColor !== ButtonStyle.INITIAL && "white" || "var(--secondary)"};
+    background-color: ${props => props.$buttonBackgroundColor !== ButtonStyle.INITIAL && props.$buttonBackgroundColor.valueOf() || "white"};
   }
 
   @media (max-width: 500px) {
@@ -53,7 +53,7 @@ export default function AnswerButton({children, onClick, isSelectedAnswer, isCor
     }
 
     return (
-        <StyledButton onClick={onClick} buttonbackgroundcolor={buttonStyle}>
+        <StyledButton onClick={onClick} $buttonBackgroundColor={buttonStyle}>
             {children}
         </StyledButton>
     );
