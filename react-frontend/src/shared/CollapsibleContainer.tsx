@@ -20,11 +20,11 @@ const Content = styled.div`
 `;
 
 export interface StyleProps {
-    $isOpen: string;
+    $isOpen: boolean;
 }
 
 const Arrow = styled.span.attrs<StyleProps>($props => ({
-    'transform': $props.isopen ? 'rotate(180deg)' : 'rotate(0deg)'
+    'transform': $props.$isopen ? 'rotate(180deg)' : 'rotate(0deg)'
 }))<StyleProps>`
   display: inline-block;
   transition: transform 0.2s ease-in-out;
