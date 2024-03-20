@@ -13,7 +13,7 @@ import java.util.UUID;
 @Service
 public class QuizServiceMock implements StartQuizSession, GetNextQuestion {
     @Override
-    public UUID startQuizSession(String topic) {
+    public UUID startQuizSession(String topic, Optional<Integer> n, Optional<String> d) {
         return UUID.randomUUID();
     }
 

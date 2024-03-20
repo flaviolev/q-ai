@@ -1,5 +1,6 @@
 package ch.zuehlke.qai.controller;
 
+import ch.zuehlke.qai.controller.request.QuizOptionsDto;
 import ch.zuehlke.qai.controller.request.SubmitAnswerDto;
 import ch.zuehlke.qai.controller.response.QuestionDTO;
 import ch.zuehlke.qai.controller.response.QuizIdDto;
@@ -18,9 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/quiz")
@@ -40,8 +39,21 @@ public class QuizController {
             description = "This can be used to create a new quiz")
     @ApiResponse(responseCode = "200", description = "Successfully returned new quiz id")
     @ApiResponse(responseCode = "500", description = "Something failed internally")
-    public QuizIdDto createQuiz(@RequestParam("topic") String topic) {
-        UUID sessionId = startQuizSession.startQuizSession(topic);
+    public QuizIdDto createQuiz(@RequestParam("topic") String topic, @RequestBody QuizOptionsDto options) {
+        Map<String, String> optionVariables = new HashMap<>();
+        String[] lines = options.optionsText().split("\n");
+
+        for (String line : lines) {
+            String[] parts = line.split("=", 2);
+            if (parts.length == 2) {
+                optionVariables.put(parts[0], parts[1]);
+            }
+        }
+
+        Optional<Integer> numberOfQuestions = Optional.of(optionVariables.get("numberOfQuestions")).map(Integer::parseInt);
+        Optional<String> difficultyLevel = Optional.of(optionVariables.get("difficulty"));
+
+        UUID sessionId = startQuizSession.startQuizSession(topic, numberOfQuestions, difficultyLevel);
         return new QuizIdDto(sessionId);
     }
 

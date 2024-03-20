@@ -32,17 +32,21 @@ public class QuizService implements StartQuizSession, GetNextQuestion {
     private final QuizMapper quizMapper;
 
     @Value("${quiz.number-of-questions-per-round}")
-    Integer numberOfQuestionsPerRound = 5;
+    Integer numberOfQuestionsForQuizDefault;
+    String difficultyLevelDefault = "difficult";
 
-    public UUID startQuizSession(String topic) {
-
+    public UUID startQuizSession(String topic, Optional<Integer> numberOfQuestions, Optional<String> difficultyLevel) {
+        int n = numberOfQuestions.orElse(numberOfQuestionsForQuizDefault);
+        String difficulty = difficultyLevel.orElse(difficultyLevelDefault);
         Message message = new Message("user",
-                String.format("I would like to have %d questions about %s", numberOfQuestionsPerRound, topic)
+                String.format("I would like to have %d %s questions about %s.", n, difficulty, topic)
         );
 
         Message systemMessage = new Message("system", "When a user requests questions, your task is to " +
                 "generate the user specified number of questions up to a maximum of 10. Each question will focus on a " +
-                "given topic and include four possible answers. These answers should be labeled A, B, C, and D." +
+                "given topic and include four possible answers. " +
+                "Consider different difficulties levels for the questions (easy, medium, hard)." +
+                "These answers should be labeled A, B, C, and D." +
                 "Your responses must be formatted in JSON, adhering to the following structure. The response should" +
                 "return a list of questions with each question must include a key named 'text' that contains the text of the question being asked." +
                 "Alongside the text, provide an array named answers. This array should contain four items, " +
