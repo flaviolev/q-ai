@@ -29,7 +29,7 @@ public class SubmissionMapper {
                 .orElseThrow(() -> new RuntimeException("Not able to determine number of questions for quiz."));
 
         long numberOfCorrectAnswers = score.getSubmissions().stream()
-                .filter(submission -> submission.getCorrectAnswer().getId() == submission.getAnswer().getId())
+                .filter(submission -> submission.getCorrectAnswer().equals(submission.getAnswer()))
                 .count();
 
 
@@ -45,7 +45,7 @@ public class SubmissionMapper {
 
         ChatGPTResponse chatGPTResponse = chatGPTService.sendCompletionMessages(List.of(systemMessage, message)).block();
 
-        if(chatGPTResponse == null ||
+        if (chatGPTResponse == null ||
                 chatGPTResponse.choices() == null ||
                 chatGPTResponse.choices().isEmpty()) {
             throw new RuntimeException("ChatGPT response is empty.");
@@ -62,6 +62,6 @@ public class SubmissionMapper {
     }
 
     public ScoreDto.SubmissionDto mapSubmissionToDto(Submission submission) {
-        return new ScoreDto.SubmissionDto(submission.getQuiz().getId(), submission.getQuestion().getQuestionId(), submission.getAnswer() != null ? submission.getAnswer() .getId() : null, submission.getCorrectAnswer().getId());
+        return new ScoreDto.SubmissionDto(submission.getQuiz().getId(), submission.getQuestion().getQuestionId(), submission.getAnswer() != null ? submission.getAnswer().getId() : null, submission.getCorrectAnswer().getId());
     }
 }
